@@ -42,7 +42,15 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+//create structure type
+struct _GPIOState
+{
+	GPIO_PinState Current;
+	GPIO_PinState Last;
+};
 
+//declare variable
+struct _GPIOState Button1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,10 +106,41 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  GPIO_PinState Button1;
+//	  GPIO_PinState Button1;
 	  Button1 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
+	  if(Button1.Last=1 && Button1.Current=0){
+		  if (delayTime == 500)
+		  {
+			  delayTime = 1000;
+		  }
+		  else
+		  {
+			  delayTime = 500;
+		  }
+	  }
+//
+//	  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,Button1);
 
-	  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,Button1);
+//	  Button1.Current = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
+//
+//	  //detect button press by using falling edge detector
+//	  if(Button1.Last == 1 && Button1.Current == 0){
+//		 HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_5);
+//	  }
+	  // save GPIO logic for next loop
+	  Button1.Last = Button1.Current;
+
+	  static uint32_t timeStamp = 0;
+	  //check current time more than alarm time
+	  if (HAL_GetTick() >= timeStamp)
+	  {
+		  //set next alarm
+		  timeStamp = HAL_GetTick() + 500; //mS
+
+		  //toggle LED
+		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	  }
+
 
   }
   /* USER CODE END 3 */
