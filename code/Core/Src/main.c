@@ -106,43 +106,43 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//	  GPIO_PinState Button1;
-	  Button1 = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
-	  if(Button1.Last=1 && Button1.Current=0){
-		  if (delayTime == 500)
-		  {
-			  delayTime = 1000;
-		  }
-		  else
-		  {
-			  delayTime = 500;
-		  }
-	  }
+	  GPIO_PinState Button;
+	  Button = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_10);
+	  // send logic for
+	  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_12,Button);
+//		  {
+//			  delayTime = 1000;
+//		  }
+//		  else
+//		  {
+//			  delayTime = 500;
+//		  }
+//}
+////
+////	  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,Button1);
 //
-//	  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,Button1);
-
-//	  Button1.Current = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
+////	  Button1.Current = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
+////
+////	  //detect button press by using falling edge detector
+////	  if(Button1.Last == 1 && Button1.Current == 0){
+////		 HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_5);
+////	  }
+//	  // save GPIO logic for next loop
+//	  Button1.Last = Button1.Current;
 //
-//	  //detect button press by using falling edge detector
-//	  if(Button1.Last == 1 && Button1.Current == 0){
-//		 HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_5);
+//	  static uint32_t timeStamp = 0;
+//	  //check current time more than alarm time
+//	  if (HAL_GetTick() >= timeStamp)
+//	  {
+//		  //set next alarm
+//		  timeStamp = HAL_GetTick() + 500; //mS
+//
+//		  //toggle LED
+//		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 //	  }
-	  // save GPIO logic for next loop
-	  Button1.Last = Button1.Current;
-
-	  static uint32_t timeStamp = 0;
-	  //check current time more than alarm time
-	  if (HAL_GetTick() >= timeStamp)
-	  {
-		  //set next alarm
-		  timeStamp = HAL_GetTick() + 500; //mS
-
-		  //toggle LED
-		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  }
-
-
-  }
+//
+//
+}
   /* USER CODE END 3 */
 }
 
@@ -243,6 +243,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
@@ -255,6 +258,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PC10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PC12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 
